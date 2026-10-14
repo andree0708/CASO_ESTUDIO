@@ -240,17 +240,21 @@ function startGateway() {
     }
   });
 
-  app.listen(PORT, () => {});
+  app.listen(PORT, () => {
+    console.log("AstroLink backend listening on " + PORT);
+  });
   return app;
 }
 
 if (require.main === module) {
   process.env.GRPC_TARGET = "localhost:50051";
   const grpcServer = startGrpcServers();
-  grpcServer.bindAsync(GRPC_ADDRESS, grpc.ServerCredentials.createInsecure(), (error) => {
+  grpcServer.bindAsync(GRPC_ADDRESS, grpc.ServerCredentials.createInsecure(), (error, port) => {
     if (error) {
+      console.error("gRPC bind failed: " + error.message);
       throw error;
     }
+    console.log("gRPC bound on " + port);
     startGateway();
   });
 }
