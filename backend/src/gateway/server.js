@@ -109,7 +109,10 @@ function startGateway() {
   const app = express();
   app.use(cors());
   app.use(express.json());
-  app.use(express.static(path.join(__dirname, "..", "..", "public")));
+
+  app.get("/", async (req, res) => {
+    res.json(toSuccess({ service: "astrolink-backend", status: "ok" }));
+  });
 
   app.get("/api/health", async (req, res) => {
     res.json(toSuccess({ status: "ok", grpc: process.env.GRPC_TARGET || "localhost:50051", time: new Date().toISOString() }));

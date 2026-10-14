@@ -1,5 +1,5 @@
 {
-  "name": "astrolink",
+  "name": "astrolink-backend",
   "version": "1.0.0",
   "description": "AstroLink space explorer with gRPC microservices",
   "main": "src/gateway/server.js",

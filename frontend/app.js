@@ -6,8 +6,19 @@ const state = {
   quizzes: []
 };
 
+const apiBase = (() => {
+  if (typeof window !== "undefined" && window.ASTROLINK_API_URL) {
+    return String(window.ASTROLINK_API_URL).replace(/\/$/, "");
+  }
+  if (typeof window !== "undefined" && (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")) {
+    return "http://localhost:3000";
+  }
+  return "";
+})();
+
 async function fetchJson(url, options) {
-  const response = await fetch(url, options);
+  const fullUrl = url.startsWith("/api") ? apiBase + url : url;
+  const response = await fetch(fullUrl, options);
   const payload = await response.json();
   if (!payload.success) throw new Error(payload.error || "Request failed");
   return payload.data;
