@@ -29,6 +29,46 @@ function toObjectType(value) {
   return found ? Number(found[0]) : 0;
 }
 
+function toCatalogObject(item) {
+  return {
+    id: item.id,
+    name: item.name,
+    type: item.type,
+    description: item.description,
+    distanceLightYears: item.distance_light_years,
+    diameterKm: item.diameter_km,
+    massKg: item.mass_kg,
+    gravityMs2: item.gravity_ms2,
+    dayLengthHours: item.day_length_hours,
+    yearLengthDays: item.year_length_days,
+    meanTempC: item.mean_temp_c,
+    imageEmoji: item.image_emoji,
+    habitable: item.habitable
+  };
+}
+
+function toDestinationObject(item) {
+  return {
+    id: item.id,
+    name: item.name,
+    distanceKm: item.distance_km,
+    gravityMs2: item.gravity_ms2,
+    difficulty: item.difficulty
+  };
+}
+
+function toProgressObject(record) {
+  return {
+    userId: record.user_id,
+    score: record.score,
+    answered: record.answered,
+    correctCount: record.correct_count,
+    accuracy: record.accuracy,
+    level: record.level,
+    rank: record.rank
+  };
+}
+
 const catalogService = {
   ListObjects(call, callback) {
     const typeFilter = toObjectType(call.request.type);
@@ -40,14 +80,14 @@ const catalogService = {
     if (search) {
       result = result.filter((item) => item.name.toLowerCase().includes(search) || item.description.toLowerCase().includes(search));
     }
-    callback(null, { objects: result });
+    callback(null, { objects: result.map(toCatalogObject) });
   },
   GetObject(call, callback) {
     const found = store.objects.find((item) => item.id === call.request.id);
     if (!found) {
       return callback({ code: grpc.status.NOT_FOUND, message: "Object not found" });
     }
-    callback(null, found);
+    callback(null, toCatalogObject(found));
   },
   ComparePlanets(call, callback) {
     const first = store.objects.find((item) => item.id === call.request.firstId);
@@ -63,13 +103,13 @@ const catalogService = {
       largerBody: first.diameter_km >= second.diameter_km ? first.name : second.name,
       heavierBody: first.mass_kg >= second.mass_kg ? first.name : second.name
     };
-    callback(null, { first, second, metrics });
+    callback(null, { first: toCatalogObject(first), second: toCatalogObject(second), metrics });
   }
 };
 
 const missionService = {
   ListDestinations(call, callback) {
-    callback(null, { destinations: store.destinations });
+    callback(null, { destinations: store.destinations.map(toDestinationObject) });
   },
   SimulateMission(call, callback) {
     const request = call.request;
@@ -90,9 +130,9 @@ const missionService = {
     const launchDays = Math.min(3, travelDays * 0.02 + 0.5);
     const cruiseDays = Math.max(0, travelDays - launchDays - 2);
     const phases = [
-      { name: "Launch", duration_days: launchDays, status: "Nominal" },
-      { name: "Cruise", duration_days: cruiseDays, status: cruiseDays > 1000 ? "Long duration" : "Nominal" },
-      { name: "Landing", duration_days: 2, status: destination.gravity_ms2 > 15 ? "High gravity risk" : "Nominal" }
+      { name: "Launch", durationDays: launchDays, status: "Nominal" },
+      { name: "Cruise", durationDays: cruiseDays, status: cruiseDays > 1000 ? "Long duration" : "Nominal" },
+      { name: "Landing", durationDays: 2, status: destination.gravity_ms2 > 15 ? "High gravity risk" : "Nominal" }
     ];
     let verdict = "Go for launch";
     if (successChance < 30) verdict = "Mission too risky";
@@ -156,7 +196,7 @@ const quizService = {
   },
   GetProgress(call, callback) {
     const record = store.getProgressRecord(call.request.userId || "explorer-1");
-    callback(null, record);
+    callback(null, toProgressObject(record));
   },
   ToggleFavorite(call, callback) {
     const userId = call.request.userId || "explorer-1";
