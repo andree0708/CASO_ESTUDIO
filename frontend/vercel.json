@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://astrolink-backend.onrender.com/api/:path*"
+      "destination": "https://astro-link-backend.onrender.com/api/:path*"
     }
   ]
 }
