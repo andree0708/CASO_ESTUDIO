@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package astrolink.mission;
+
+service MissionService {
+  rpc SimulateMission (SimulateMissionRequest) returns (SimulateMissionResponse);
+  rpc ListDestinations (ListDestinationsRequest) returns (ListDestinationsResponse);
+}
+
+message Destination {
+  string id = 1;
+  string name = 2;
+  double distance_km = 3;
+  double gravity_ms2 = 4;
+  string difficulty = 5;
+}
+
+message ListDestinationsRequest {}
+
+message ListDestinationsResponse {
+  repeated Destination destinations = 1;
+}
+
+message SimulateMissionRequest {
+  string destination_id = 1;
+  double spacecraft_speed_kms = 2;
+  double payload_kg = 3;
+  int32 crew_size = 4;
+}
+
+message MissionPhase {
+  string name = 1;
+  double duration_days = 2;
+  string status = 3;
+}
+
+message SimulateMissionResponse {
+  string destination_id = 1;
+  string destination_name = 2;
+  double distance_km = 3;
+  double travel_days = 4;
+  double fuel_tons = 5;
+  double success_chance = 6;
+  string difficulty = 7;
+  repeated MissionPhase phases = 8;
+  string verdict = 9;
+}

@@ -1,0 +1,76 @@
+syntax = "proto3";
+
+package astrolink.quiz;
+
+service QuizService {
+  rpc ListQuizzes (ListQuizzesRequest) returns (ListQuizzesResponse);
+  rpc SubmitAnswer (SubmitAnswerRequest) returns (SubmitAnswerResponse);
+  rpc GetProgress (GetProgressRequest) returns (UserProgress);
+  rpc ToggleFavorite (ToggleFavoriteRequest) returns (ToggleFavoriteResponse);
+  rpc ListFavorites (ListFavoritesRequest) returns (ListFavoritesResponse);
+}
+
+message QuizQuestion {
+  string id = 1;
+  string category = 2;
+  string question = 3;
+  repeated string options = 4;
+  int32 correct_index = 5;
+  string explanation = 6;
+}
+
+message ListQuizzesRequest {
+  string category = 1;
+}
+
+message ListQuizzesResponse {
+  repeated QuizQuestion questions = 1;
+}
+
+message SubmitAnswerRequest {
+  string user_id = 1;
+  string question_id = 2;
+  int32 selected_index = 3;
+}
+
+message SubmitAnswerResponse {
+  bool correct = 1;
+  string explanation = 2;
+  int32 score = 3;
+  int32 answered = 4;
+  int32 correct_count = 5;
+  double accuracy = 6;
+}
+
+message GetProgressRequest {
+  string user_id = 1;
+}
+
+message UserProgress {
+  string user_id = 1;
+  int32 score = 2;
+  int32 answered = 3;
+  int32 correct_count = 4;
+  double accuracy = 5;
+  int32 level = 6;
+  string rank = 7;
+}
+
+message ToggleFavoriteRequest {
+  string user_id = 1;
+  string object_id = 2;
+}
+
+message ToggleFavoriteResponse {
+  string object_id = 1;
+  bool favorite = 2;
+  repeated string favorites = 3;
+}
+
+message ListFavoritesRequest {
+  string user_id = 1;
+}
+
+message ListFavoritesResponse {
+  repeated string favorites = 1;
+}

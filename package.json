@@ -1,0 +1,22 @@
+{
+  "name": "astrolink",
+  "version": "1.0.0",
+  "description": "AstroLink space explorer with gRPC microservices",
+  "main": "src/gateway/server.js",
+  "scripts": {
+    "start": "node src/gateway/server.js",
+    "start:grpc": "node src/grpc/services.js",
+    "start:gateway": "node src/gateway/server.js",
+    "dev": "node src/gateway/server.js"
+  },
+  "dependencies": {
+    "@grpc/grpc-js": "^1.9.0",
+    "@grpc/proto-loader": "^0.7.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "zod": "^3.22.4"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

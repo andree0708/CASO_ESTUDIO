@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+package astrolink.catalog;
+
+service CatalogService {
+  rpc ListObjects (ListObjectsRequest) returns (ListObjectsResponse);
+  rpc GetObject (GetObjectRequest) returns (CelestialObject);
+  rpc ComparePlanets (ComparePlanetsRequest) returns (ComparePlanetsResponse);
+}
+
+enum ObjectType {
+  UNKNOWN = 0;
+  PLANET = 1;
+  STAR = 2;
+  GALAXY = 3;
+  PHENOMENON = 4;
+}
+
+message CelestialObject {
+  string id = 1;
+  string name = 2;
+  ObjectType type = 3;
+  string description = 4;
+  double distance_light_years = 5;
+  double diameter_km = 6;
+  double mass_kg = 7;
+  double gravity_ms2 = 8;
+  double day_length_hours = 9;
+  double year_length_days = 10;
+  double mean_temp_c = 11;
+  string image_emoji = 12;
+  bool habitable = 13;
+}
+
+message ListObjectsRequest {
+  string type = 1;
+  string search = 2;
+}
+
+message ListObjectsResponse {
+  repeated CelestialObject objects = 1;
+}
+
+message GetObjectRequest {
+  string id = 1;
+}
+
+message ComparePlanetsRequest {
+  string first_id = 1;
+  string second_id = 2;
+}
+
+message ComparisonMetrics {
+  double gravity_ratio = 1;
+  double diameter_ratio = 2;
+  double distance_difference = 3;
+  double temp_difference = 4;
+  string larger_body = 5;
+  string heavier_body = 6;
+}
+
+message ComparePlanetsResponse {
+  CelestialObject first = 1;
+  CelestialObject second = 2;
+  ComparisonMetrics metrics = 3;
+}

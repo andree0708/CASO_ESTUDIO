@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AstroLink Space Explorer</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<header class="header">
+<div class="brand">
+<span class="logo">🚀</span>
+<div>
+<h1>AstroLink</h1>
+<p>Space explorer powered by gRPC</p>
+</div>
+</div>
+<div id="progressBadge" class="badge">Cadet | 0 pts</div>
+</header>
+<nav class="tabs">
+<button data-tab="catalog" class="active">Catalog</button>
+<button data-tab="compare">Compare</button>
+<button data-tab="mission">Missions</button>
+<button data-tab="quiz">Quiz</button>
+<button data-tab="favorites">Favorites</button>
+</nav>
+<main>
+<section id="tab-catalog" class="panel active">
+<div class="filters">
+<input id="searchInput" placeholder="Search objects..." />
+<select id="typeFilter">
+<option value="">All types</option>
+<option value="PLANET">Planets</option>
+<option value="STAR">Stars</option>
+<option value="GALAXY">Galaxies</option>
+<option value="PHENOMENON">Phenomena</option>
+</select>
+<button id="searchButton">Search</button>
+</div>
+<div id="catalogGrid" class="grid"></div>
+</section>
+<section id="tab-compare" class="panel">
+<div class="card">
+<h2>Planet Comparator</h2>
+<div class="row">
+<select id="firstSelect"></select>
+<select id="secondSelect"></select>
+<button id="compareButton">Compare</button>
+</div>
+<div id="compareResult"></div>
+</div>
+</section>
+<section id="tab-mission" class="panel">
+<div class="card">
+<h2>Mission Simulator</h2>
+<div class="form">
+<label>Destination<select id="destinationSelect"></select></label>
+<label>Speed (km/s)<input id="speedInput" type="number" value="20" min="1" max="300000" /></label>
+<label>Payload (kg)<input id="payloadInput" type="number" value="1000" min="0" max="1000000" /></label>
+<label>Crew<input id="crewInput" type="number" value="2" min="0" max="20" /></label>
+<button id="simulateButton">Launch Simulation</button>
+</div>
+<div id="missionResult"></div>
+</div>
+</section>
+<section id="tab-quiz" class="panel">
+<div class="card">
+<h2>Astronomy Quiz</h2>
+<div class="row">
+<select id="categoryFilter">
+<option value="">All</option>
+<option value="planets">Planets</option>
+<option value="stars">Stars</option>
+<option value="galaxies">Galaxies</option>
+<option value="missions">Missions</option>
+</select>
+<button id="loadQuizButton">Load</button>
+</div>
+<div id="quizBox"></div>
+</div>
+</section>
+<section id="tab-favorites" class="panel">
+<div class="card">
+<h2>Favorites and Progress</h2>
+<div id="progressBox"></div>
+<div id="favoritesGrid" class="grid"></div>
+</div>
+</section>
+</main>
+<footer>
+<span id="healthStatus">Connecting...</span>
+<span>AstroLink | Catalog + Mission + Quiz gRPC services</span>
+</footer>
+<script src="app.js"></script>
+</body>
+</html>
